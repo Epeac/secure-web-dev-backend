@@ -46,12 +46,19 @@ async function controllerUpdateSelf(req, res) {
     return httpErrorHelper(e, req, res, next);
   }
 }
+async function controllerGetAllUser(req, res) {
+  const limit = req.query.limit || 20;
+  const offset = req.query.offset || 0;
+  const locations = await usersService.findAll(limit, offset);
+  return res.status(200).send(locations);
+}
 
+/*router.get("/", controllerGetAllLocations);
 router.patch(
   "/me",
   passport.authenticate("jwt", { session: false }),
   controllerUpdateSelf
-);
+);*/
 
 async function controllerDeleteUser(req, res, next) {
   try {

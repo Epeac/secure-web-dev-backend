@@ -26,6 +26,10 @@ async function findOne(id) {
   }
   return user;
 }
+function findAll(limit = 20, offset = 0) {
+  return User.find().limit(limit).skip(offset);
+}
+
 
 // Only use this function for authentication purpose
 async function findOneForAuth(username) {
@@ -59,6 +63,7 @@ async function deleteOne(id) {
 module.exports = {
   createOne,
   findOne,
+  findAll,
   findOneForAuth,
   updateOne,
   generateJwt,

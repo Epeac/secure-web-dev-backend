@@ -1,36 +1,33 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const Location = require("./src/locations/locations.model");
+const Recommandation = require("./src/recommandation/recommandation.model");
 
-const filmingLocations = require("./lieux-de-tournage-a-paris.json");
+const Movie = require("./Film.json");
 
-function buildLocation(filmingLocation) {
+function buildMovie(Movie) {
   return {
-    filmType: filmingLocation.fields.type_tournage,
-    filmProducerName: filmingLocation.fields.nom_producteur,
-    endDate: filmingLocation.fields.date_fin,
-    filmName: filmingLocation.fields.nom_tournage,
-    district: filmingLocation.fields.ardt_lieu,
-    sourceLocationId: filmingLocation.fields.id_lieu,
-    filmDirectorName: filmingLocation.fields.nom_realisateur,
-    address: filmingLocation.fields.adresse_lieu,
-    startDate: filmingLocation.fields.date_debut,
-    year: filmingLocation.fields.annee_tournage,
-    geolocation: filmingLocation.fields.geo_shape,
+    filmType: Movie.fields.type_tournage,
+    filmProducerName: Movie.fields.nom_producteur,
+    filmName: Movie.fields.nom,
+    filmDirectorName: Movie.fields.nom_realisateur,
+    realesedate: Movie.fields.annee_tournage,
+    summary: Movie.fields.summary,
+    opinion: Movie.fields.opinion,
+    grade: Movie.fields.grade,
   };
 }
 
-async function importBulkFilmingLocations() {
-  const locationsArray = filmingLocations.map((filmingLocation) =>
-    buildLocation(filmingLocation)
+async function importBulkMovie() {
+  const MovieArray = Movie.map((Movie) =>
+    buildMovie(Movie)
   );
-  await Location.insertMany(locationsArray);
+  await Recommandation.insertMany(MovieArray);
 }
 async function main() {
   await mongoose.connect(process.env.MONGO_URI);
   console.log("Import script connected to database, starting import.");
-  await importBulkFilmingLocations();
+  await importBulkMovie();
   console.log("Finished importing.");
 }
 
